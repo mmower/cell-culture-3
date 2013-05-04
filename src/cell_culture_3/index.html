@@ -3,11 +3,14 @@
 <head>
   <script type="text/javascript" src="../../resources/bootstrap.js"></script>
   <script type="text/javascript" src="../../resources/jquery-2.0.0.js"></script>
+  <script type="text/javascript" src="../../resources/underscore.js"></script>
   <script type="text/javascript" src="../../resources/raphael.js"></script>
   <script type="text/javascript" src="../../resources/bootstrap-slider.js"></script>
+  <script type="text/javascript" src="../../resources/seedrandom.js"></script>
   <link rel="stylesheet" media="all" href="../../resources/bootstrap.css">
   <link rel="stylesheet" media="all" href="../../resources/slider.css">
   <script type="text/javascript" src="cellculture.js"></script>
+  <script type="text/javascript" src="gameoflife.js"></script>
   <style type="text/css">
     body {
       background-color: #FFFFFF;
@@ -44,10 +47,7 @@
       });
 
       window.setupFunction = function() {
-        return cellculture.setup( window.paper, 16, function(a) {
-          console.log( "Stable " + a + " attractor" );
-          stopAnimating();
-        } );
+        return cellculture.setup( window.paper, 16, {} );
       };
 
       window.paper = Raphael( "ui", 600, 600 );
