@@ -10,7 +10,9 @@ It currently uses a simple randomised starting point. Watch [life here](http://h
 
 * Bootstrap: http://twitter.github.io/bootstrap/
 * jQuery: http://jquery.com/
+* underscore.js: http://underscorejs.org/
 * bootstrap-slider: http://www.eyecon.ro/bootstrap-slider/
+* seedrandom.js: http://davidbau.com/encode/seedrandom.js
 
 ## License
 
