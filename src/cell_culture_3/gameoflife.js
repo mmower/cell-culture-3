@@ -1,17 +1,19 @@
 (function( cellculture, $, undefined ){
   var colourings = [
     "#FFFFFF",
-    "#800000"
+    "#800000",
+    "#400000"
   ];
 
 
   var rules = [
     [0,0,0,1,0,0,0,0,0],
-    [0,0,1,1,0,0,0,0,0]
+    [0,0,2,2,0,0,0,0,0],
+    [0,0,2,2,0,0,0,0,0]
   ];
 
 
-  var live_p = 0.273;
+  cellculture.start_alive_p = 0.273;
 
 
   cellculture.initial_matrix = function( dim, options ) {
@@ -30,7 +32,7 @@
 
 
   function living_cell() {
-    return Math.random() < live_p ? 1 : 0;
+    return Math.random() < cellculture.start_alive_p ? 1 : 0;
   }
 
 
@@ -65,7 +67,7 @@
     for( var y = -1; y < 2; ++y ) {
       for( var x = -1; x < 2; ++x ) {
         if( x != 0 || y != 0 ) {
-          living_neighbours += matrix.cells[cellculture.cell_address( matrix, cellculture.offset_cell_position( matrix, pos, x, y ) )];
+          living_neighbours += (matrix.cells[cellculture.cell_address( matrix, cellculture.offset_cell_position( matrix, pos, x, y ) )])>0;
         }
       }
     }

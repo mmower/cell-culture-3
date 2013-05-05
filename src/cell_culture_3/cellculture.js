@@ -3,6 +3,8 @@
   cellculture.setup = function( paper, dim, options ) {
     options = options || {};
 
+    paper.clear();
+
     var matrix = cellculture.initial_matrix( dim, options );
     var shapes = create_shapes( paper, matrix );
     update_shapes( matrix, shapes );
@@ -10,6 +12,9 @@
     return function() {
       matrix = evolve_matrix( matrix, options );
       update_shapes( matrix, shapes );
+      return {
+        gen: matrix.gen
+      };
     };
   };
 
