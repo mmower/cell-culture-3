@@ -11,6 +11,8 @@
   <link rel="stylesheet" media="all" href="../../resources/slider.css">
   <script type="text/javascript" src="cellculture.js"></script>
   <script type="text/javascript" src="gameoflife.js"></script>
+  <script type="text/javascript" src="ccanimator.js"></script>
+  <script type="text/javascript" src="urlquery.js"></script>
   <style type="text/css">
     body {
       background-color: #FFFFFF;
@@ -33,12 +35,12 @@
     <label>Dimensions</label>
     <input id="dslider" type="text" value="" data-slider-min="4" data-slider-max="64" data-slider-step="1" data-slider-value="16" data-slider-handle="triangle">
     <br>
-    <label>Animation delay</label>
-    <input id="tslider" type="text" value="" data-slider-min="100" data-slider-max="2500" data-slider-step="100" data-slider-value="250" data-slider-handle="triangle">
+    <label>Frame/min</label>
+    <input id="fslider" type="text" value="" data-slider-min="15" data-slider-max="600" data-slider-step="1" data-slider-value="60" data-slider-handle="triangle">
     <br/>
-    <button id="transport" onclick="javascript:toggleAnimation();">Play</button>
-    <button id="step" onclick="javascript:stepAnimation();">Step</button>
-    <button id="reset" onclick="javascript:resetAnimation();">Reset</button>
+    <button id="transport" onclick="javascript:ccanimator.toggle();">Play</button>
+    <button id="step" onclick="javascript:ccanimator.step();">Step</button>
+    <button id="reset" onclick="javascript:ccanimator.reset();">Reset</button>
     <br/>
     </form>
     <div id="counter">Generation: </div>
@@ -47,11 +49,12 @@
   </div>
   <script type="text/javascript">
     var dimensions = 16;
+    var paper;
 
     $(document).ready(function(){
 
-      var params = parseQueryParams();
-      console.log( params );
+      var params = urlquery.pageParamMap();
+
       if( params.seed ) {
         $("#seed").val( params.seed );
       }
@@ -64,13 +67,11 @@
         $("#pslider").slider( "setValue", cellculture.start_alive_p );
       }
 
-
-      $("#tslider").slider().on("slideStop",function(ev){
-        window.frame_interval = ev.target.value;
-        if( isAnimating() ) {
-          stopAnimating();
-          startAnimating();
-        }
+      $("#fslider").slider().on("slideStop",function(ev){
+        console.log( "Slider stopped at " + ev.target.value );
+        ccanimator.whilePaused(function(){
+          ccanimator.frame_rate = parseInt(ev.target.value);
+        })
       });
 
       $("#dslider").slider().on("slideStop",function(ev){
@@ -81,72 +82,26 @@
         cellculture.start_alive_p = ev.target.value;
       });
 
-      window.setupFunction = function() {
+      paper = Raphael( "ui", 600, 600 );
+
+      ccanimator.setup( function() {
         Math.seedrandom( $("#seed").val() );
         return cellculture.setup( window.paper, dimensions, {} );
+      });
+
+      ccanimator.event_fun = function( event, info ) {
+        if( event == "start" ) {
+          $("#transport").html( "Stop" );
+        } else if( event == "stop" ) {
+          $("#transport").html( "Play" );
+        } else if( event == "reset" ) {
+          $("#counter").html( "Generation: 1" );
+        } else if( event == "frame" ) {
+          $("#counter").html( "Generation: " + info.gen );
+        }
       };
-
-      window.paper = Raphael( "ui", 600, 600 );
-
-      window.cell_animator = window.setupFunction();
-      window.animator_interval = null;
-      window.frame_interval = 250;
     });
 
-
-    function parseQueryParams() {
-      var query = window.location.toString().split( "?" )[1] || "";
-      return _.reduce( query.split("&"), function(memo,param) {
-        var elems = param.split( "=" );
-        memo[elems[0]]=elems[1];
-        return memo;
-      }, {} );
-    }
-
-
-    function resetAnimation() {
-      var should_start = isAnimating();
-
-      if( should_start ) {
-         stopAnimating();
-      };
-      window.cell_animator = window.setupFunction();
-      if( should_start ) {
-        startAnimating();
-      }
-    }
-
-    function stepAnimation() {
-      next_generation();
-    }
-
-    function isAnimating() {
-      return window.animator_interval;
-    }
-
-    function stopAnimating() {
-      clearInterval( window.animator_interval );
-      window.animator_interval = null;
-      $("#transport").html( "Play" );
-    }
-
-    function next_generation() {
-      var info = window.cell_animator();
-      $("#counter").html( "Generation: " + info.gen );
-    }
-
-    function startAnimating() {
-      window.animator_interval = setInterval(next_generation, window.frame_interval );
-      $("#transport").html( "Stop" );
-    }
-
-    function toggleAnimation() {
-      if( isAnimating() ) {
-        stopAnimating();
-      } else {
-        startAnimating();
-      }
-    }
   </script>
 </body>
 </html>

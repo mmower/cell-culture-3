@@ -22,7 +22,7 @@
   cellculture.new_matrix = function( dim, cell_func ) {
     return {
       dim: dim,
-      gen: 0,
+      gen: 1,
       cells: cell_generator( dim, cell_func )
     };
   }
