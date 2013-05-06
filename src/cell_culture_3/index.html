@@ -86,7 +86,21 @@
 
       ccanimator.setup( function() {
         Math.seedrandom( $("#seed").val() );
-        return cellculture.setup( window.paper, dimensions, {} );
+        return cellculture.setup({
+          dim: dimensions,
+          draw_fun: function(matrix) {
+            paper.clear();
+            return _.range( matrix.dim * matrix.dim ).map( function( i ) {
+              var rect = cellculture.cell_rect( cellculture.cell_position(matrix,i), matrix.dim, paper.width, paper.height );
+              return paper.rect( rect.x, rect.y, rect.w, rect.h, 1 );
+            });
+          },
+          update_fun: function(matrix,shapes) {
+            _.each( shapes, function(shape,i) {
+              shape.attr( "fill", cellculture.cell_colour( matrix, i ))
+            });
+          }
+        });
       });
 
       ccanimator.event_fun = function( event, info ) {

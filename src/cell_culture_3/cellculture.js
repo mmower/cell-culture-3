@@ -1,17 +1,19 @@
-(function( cellculture, $, undefined ) {
+(function( cellculture ) {
 
-  cellculture.setup = function( paper, dim, options ) {
+  cellculture.setup = function( options ) {
     options = options || {};
 
-    paper.clear();
+    var dim = options['dim'],
+        draw_fun = options['draw_fun'],
+        update_fun = options['update_fun'];
 
     var matrix = cellculture.initial_matrix( dim, options );
-    var shapes = create_shapes( paper, matrix );
-    update_shapes( matrix, shapes );
+    var shapes = draw_fun( matrix );
+    update_fun( matrix, shapes );
 
     return function() {
       matrix = evolve_matrix( matrix, options );
-      update_shapes( matrix, shapes );
+      update_fun( matrix, shapes );
       return {
         gen: matrix.gen
       };
@@ -42,19 +44,7 @@
   }
 
 
-  function create_shapes( paper, matrix ) {
-    return _.range( matrix.dim * matrix.dim ).map( function( i ) {
-      var rect = cell_rect( cellculture.cell_position(matrix,i), matrix.dim, paper.width, paper.height );
-      return paper.rect( rect.x, rect.y, rect.w, rect.h, 1 );
-    });
-  }
 
-
-  function update_shapes( matrix, shapes ) {
-    _.each( shapes, function(shape,i) {
-      shape.attr( "fill", cellculture.cell_colour( matrix, i ))
-    });
-  }
 
 
   cellculture.cell_position = function( matrix, i ) {
@@ -90,7 +80,7 @@
   }
 
 
-  function cell_rect( cell_pos, dim, width, height ) {
+  cellculture.cell_rect = function( cell_pos, dim, width, height ) {
     return {
       y: ( height / dim ) * cell_pos.y,
       x: ( width / dim ) * cell_pos.x,
@@ -99,4 +89,4 @@
     };
   }
 
-}( window.cellculture = window.cellculture || {}, jQuery ));
+}( window.cellculture = window.cellculture || {} ));
