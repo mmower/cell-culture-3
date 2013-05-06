@@ -1,15 +1,13 @@
-(function( cellculture, $, undefined ){
+(function( cellculture ){
   var colourings = [
     "#FFFFFF",
-    "#800000",
-    "#400000"
+    "#800000"
   ];
 
 
-  var rules = [
+  cellculture.rules = [
     [0,0,0,1,0,0,0,0,0],
-    [0,0,2,2,0,0,0,0,0],
-    [0,0,2,2,0,0,0,0,0]
+    [0,0,1,1,0,0,0,0,0],
   ];
 
 
@@ -22,7 +20,7 @@
 
 
   cellculture.gen_fun = function( matrix, i ) {
-    return rules[matrix.cells[i]][living_neighbours(matrix,i)];
+    return cellculture.rules[matrix.cells[i]][living_neighbours(matrix,i)];
   }
 
 
@@ -75,4 +73,4 @@
     return living_neighbours;
   }
 
-}(window.cellculture = window.cellculture || {}, jQuery))
+}(window.cellculture = window.cellculture || {} ))

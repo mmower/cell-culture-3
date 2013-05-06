@@ -14,10 +14,13 @@ It currently uses a simple randomised starting point. Watch [life here](http://h
 ## Credits
 
 * Bootstrap: http://twitter.github.io/bootstrap/
+* raphael.js: http://raphaeljs.com
 * jQuery: http://jquery.com/
 * underscore.js: http://underscorejs.org/
 * bootstrap-slider: http://www.eyecon.ro/bootstrap-slider/
 * seedrandom.js: http://davidbau.com/encode/seedrandom.js
+* handsontable: http://handsontable.com
+* numeral.js: http://numeraljs.com
 
 ## License
 

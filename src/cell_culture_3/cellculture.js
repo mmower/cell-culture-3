@@ -44,9 +44,6 @@
   }
 
 
-
-
-
   cellculture.cell_position = function( matrix, i ) {
     return {
       y: Math.floor( i / matrix.dim ),

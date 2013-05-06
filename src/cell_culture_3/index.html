@@ -7,8 +7,11 @@
   <script type="text/javascript" src="../../resources/raphael.js"></script>
   <script type="text/javascript" src="../../resources/bootstrap-slider.js"></script>
   <script type="text/javascript" src="../../resources/seedrandom.js"></script>
+  <script type="text/javascript" src="../../resources/jquery.handsontable.js"></script>
+  <script type="text/javascript" src="../../resources/numeral.js"></script>
   <link rel="stylesheet" media="all" href="../../resources/bootstrap.css">
   <link rel="stylesheet" media="all" href="../../resources/slider.css">
+  <link rel="stylesheet" media="all" href="../../resources/jquery.handsontable.css">
   <script type="text/javascript" src="cellculture.js"></script>
   <script type="text/javascript" src="gameoflife.js"></script>
   <script type="text/javascript" src="ccanimator.js"></script>
@@ -26,26 +29,29 @@
 </head>
 <body>
   <div class="container">
-    <form onsubmit="return false;">
-    <label>Seed</label>
-    <input id="seed" type="text" value="Alas Poor Yorrick">
-    <label>Alive(p)</label>
-    <input id="pslider" type="text" value="" data-slider-min="0.001" data-slider-max="0.999" data-slider-step="0.001" data-slider-value="0.273" data-slider-handle="triangle">
-    <br>
-    <label>Dimensions</label>
-    <input id="dslider" type="text" value="" data-slider-min="4" data-slider-max="64" data-slider-step="1" data-slider-value="16" data-slider-handle="triangle">
-    <br>
-    <label>Frame/min</label>
-    <input id="fslider" type="text" value="" data-slider-min="15" data-slider-max="600" data-slider-step="1" data-slider-value="60" data-slider-handle="triangle">
-    <br/>
+    <div class="row">
+      <div class="span4"><label>Seed</label></div>
+      <div class="span4"><label>Alive %</label></div>
+      <div class="span4"><label>Dimensions</label></div>
+    </div>
+    <div class="row">
+      <div class="span4"><input id="seed" type="text" value="Alas Poor Yorrick"></div>
+      <div class="span4"><input id="pslider" type="text" value="" data-slider-min="0.001" data-slider-max="0.999" data-slider-step="0.001" data-slider-value="0.273" data-slider-handle="triangle"></div>
+      <div class="span4"><input id="dslider" type="text" value="" data-slider-min="4" data-slider-max="64" data-slider-step="1" data-slider-value="16" data-slider-handle="triangle"></div>
+    </div>
     <button id="transport" onclick="javascript:ccanimator.toggle();">Play</button>
     <button id="step" onclick="javascript:ccanimator.step();">Step</button>
     <button id="reset" onclick="javascript:ccanimator.reset();">Reset</button>
-    <br/>
-    </form>
     <div id="counter">Generation: </div>
     <div id="ui">
+    <label>Frame/min</label>
+    <input id="fslider" type="text" value="" data-slider-min="15" data-slider-max="600" data-slider-step="1" data-slider-value="60" data-slider-handle="triangle">
     </div>
+
+    <h1>Rules</h1>
+    <div id="rules">
+    </div>
+
   </div>
   <script type="text/javascript">
     var dimensions = 16;
@@ -105,6 +111,7 @@
 
       ccanimator.event_fun = function( event, info ) {
         if( event == "start" ) {
+          console.log( cellculture.rules );
           $("#transport").html( "Stop" );
         } else if( event == "stop" ) {
           $("#transport").html( "Play" );
@@ -114,6 +121,39 @@
           $("#counter").html( "Generation: " + info.gen );
         }
       };
+
+      $("#rules").handsontable({
+        startRows: 2,
+        startCols: 8,
+        data: cellculture.rules,
+        columns: [
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+          {
+            type: 'numeric'
+          },
+        ]
+      });
+
     });
 
   </script>
