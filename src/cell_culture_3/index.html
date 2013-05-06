@@ -49,6 +49,22 @@
     var dimensions = 16;
 
     $(document).ready(function(){
+
+      var params = parseQueryParams();
+      console.log( params );
+      if( params.seed ) {
+        $("#seed").val( params.seed );
+      }
+      if( params.dim ) {
+        dimensions = Math.floor( params.dim );
+        $("#dslider").slider( "setValue", dimensions );
+      }
+      if( params.p ) {
+        cellculture.start_alive_p = parseFloat( params.p );
+        $("#pslider").slider( "setValue", cellculture.start_alive_p );
+      }
+
+
       $("#tslider").slider().on("slideStop",function(ev){
         window.frame_interval = ev.target.value;
         if( isAnimating() ) {
@@ -76,6 +92,17 @@
       window.animator_interval = null;
       window.frame_interval = 250;
     });
+
+
+    function parseQueryParams() {
+      var query = window.location.toString().split( "?" )[1] || "";
+      return _.reduce( query.split("&"), function(memo,param) {
+        var elems = param.split( "=" );
+        memo[elems[0]]=elems[1];
+        return memo;
+      }, {} );
+    }
+
 
     function resetAnimation() {
       var should_start = isAnimating();
